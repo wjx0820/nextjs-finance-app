@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useMedia } from "react-use";
 import { Menu } from "lucide-react";
+import { useMedia } from "react-use";
 import { usePathname, useRouter } from "next/navigation";
 
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { NavButton } from "@/components/nav-button";
 import { Button } from "@/components/ui/button";
+import { NavButton } from "@/components/nav-button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const routes = [
   {
@@ -36,9 +36,7 @@ export const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const router = useRouter();
-
   const pathname = usePathname();
-
   const isMobile = useMedia("(max-width: 1024px)", false);
 
   const onClick = (href: string) => {
@@ -49,7 +47,7 @@ export const Navigation = () => {
   if (isMobile) {
     return (
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetTrigger>
+        <SheetTrigger asChild>
           <Button
             variant="outline"
             size="sm"
@@ -60,18 +58,16 @@ export const Navigation = () => {
         </SheetTrigger>
         <SheetContent side="left" className="px-2">
           <nav className="flex flex-col gap-y-2 pt-6">
-            {routes.map((r) => {
-              return (
-                <Button
-                  key={r.href}
-                  variant={r.href === pathname ? "secondary" : "ghost"}
-                  onClick={() => onClick(r.href)}
-                  className="w-full justify-start"
-                >
-                  {r.label}
-                </Button>
-              );
-            })}
+            {routes.map((route) => (
+              <Button
+                key={route.href}
+                variant={route.href === pathname ? "secondary" : "ghost"}
+                onClick={() => onClick(route.href)}
+                className="w-full justify-start"
+              >
+                {route.label}
+              </Button>
+            ))}
           </nav>
         </SheetContent>
       </Sheet>
@@ -79,17 +75,15 @@ export const Navigation = () => {
   }
 
   return (
-    <div className="hidden items-center gap-x-2 overflow-x-auto lg:flex">
-      {routes.map((r) => {
-        return (
-          <NavButton
-            href={r.href}
-            key={r.href}
-            label={r.label}
-            isActive={pathname === r.href}
-          />
-        );
-      })}
-    </div>
+    <nav className="hidden items-center gap-x-2 overflow-x-auto lg:flex">
+      {routes.map((route) => (
+        <NavButton
+          key={route.href}
+          href={route.href}
+          label={route.label}
+          isActive={pathname === route.href}
+        />
+      ))}
+    </nav>
   );
 };
