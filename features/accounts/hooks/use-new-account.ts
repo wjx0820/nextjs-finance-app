@@ -1,4 +1,3 @@
-import { is } from "drizzle-orm";
 import { create } from "zustand";
 
 type NewAccountState = {
