@@ -1,10 +1,11 @@
 import { z } from "zod";
 import { Hono } from "hono";
-import { and, desc, eq, gte, lt, lte, sql, sum } from "drizzle-orm";
-import { db } from "@/db/drizzle";
 import { zValidator } from "@hono/zod-validator";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
-import { differenceInDays, parse, subDays } from "date-fns";
+import { subDays, parse, differenceInDays } from "date-fns";
+import { and, desc, eq, gte, lt, lte, sql, sum } from "drizzle-orm";
+
+import { db } from "@/db/drizzle";
 import { accounts, categories, transactions } from "@/db/schema";
 import { calculatePercentageChange, fillMissingDays } from "@/lib/utils";
 
@@ -36,7 +37,6 @@ const app = new Hono().get(
     const endDate = to ? parse(to, "yyyy-MM-dd", new Date()) : defaultTo;
 
     const periodLength = differenceInDays(endDate, startDate) + 1;
-    console.log("periodLength", { periodLength });
     const lastPeriodStart = subDays(startDate, periodLength);
     const lastPeriodEnd = subDays(endDate, periodLength);
 
